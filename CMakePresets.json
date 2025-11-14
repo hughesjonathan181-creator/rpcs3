@@ -69,6 +69,18 @@
           ]
         }
       }
+    },
+    {
+      "hidden": true,
+      "name": "Qt",
+      "cacheVariables": {
+        "CMAKE_PREFIX_PATH": "$env{QTDIR}"
+      },
+      "vendor": {
+        "qt-project.org/Qt": {
+          "checksum": "wVa86FgEkvdCTVp1/nxvrkaemJc="
+        }
+      }
     }
   ],
   "buildPresets": [
@@ -82,5 +94,10 @@
       "configurePreset": "msvc",
       "configuration": "Release"
     }
-  ]
+  ],
+  "vendor": {
+    "qt-project.org/Presets": {
+      "checksum": "QUH3XgGNIHQ6iWeIic/E//47BRQ="
+    }
+  }
 }

@@ -108,6 +108,10 @@ CMakeLists.txt.user
 *.sublime-project
 *.sublime-workspace
 
+# vcpkg
+!/vcpkg_installed
+/vcpkg_installed/*
+
 # CLion
 /.idea/*
 /cmake-build-*/

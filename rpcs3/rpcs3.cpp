@@ -1104,6 +1104,43 @@ int run_rpcs3(int argc, char** argv)
 	// Force install firmware or pkg first if specified through command-line
 	if (parser.isSet(arg_installfw) || parser.isSet(arg_installpkg))
 	{
+		// Support installing a PKG from the command line even when --no-gui is used.
+		// For --installpkg + --no-gui we perform a CLI install using utils::install_pkg().
+		// and make sure logs are visible on the console.
+		if (parser.isSet(arg_installpkg) && s_no_gui)
+		{
+			const std::string pkg_path = parser.value(installpkg_option).toStdString();
+
+			if (!fs::is_file(pkg_path))
+			{
+				report_fatal_error(fmt::format("No pkg file found: %s", pkg_path));
+			}
+
+			// Ensure emulator subsystems are initialized as the installer relies on some emulator utilities.
+			// Attach a console so sys_log messages are visible to the user when running no-gui.
+			utils::attach_console(utils::console_stream::std_out | utils::console_stream::std_err, true);
+
+			sys_log.notice("Installing PKG from command line (no-gui): %s", pkg_path);
+
+			// Init emulator subsystems used by the installer (VFS, config, etc).
+			Emu.Init();
+
+			// utils::install_pkg prints progress to logs (sys_log). Because we attached the console above,
+			// progress and final messages will be visible on stdout/stderr.
+			if (!rpcs3::utils::install_pkg(pkg_path))
+			{
+				sys_log.error("Failed to install package: %s", pkg_path);
+				// keep a non-zero exit code on failure
+				Emu.Quit(true);
+				return 1;
+			}
+
+			sys_log.success("Successfully installed package: %s", pkg_path);
+			// Quit cleanly after finishing the CLI install
+			Emu.Quit(true);
+			return 0;
+		}
+
 		if (auto gui_app = qobject_cast<gui_application*>(app.data()))
 		{
 			if (s_no_gui)

@@ -1,0 +1,15 @@
+{
+  "name": "rpcs3-project-dependencies",
+  "version-string": "0.1",
+  "description": "Dependencies required to compile RPCS3 using vcpkg.",
+  "builtin-baseline": "365f6444ab40ee87c73c947b475b3a267b3cb77c", 
+  "dependencies": [
+    "zlib",
+    "pkgconf",
+    "glew",
+    "ffmpeg",
+    "sdl3",
+    "yasm", 
+    "qtbase"
+  ]
+}
