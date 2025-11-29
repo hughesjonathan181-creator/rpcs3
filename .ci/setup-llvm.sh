@@ -30,7 +30,7 @@ download_and_verify()
     fileName="$4"
 
     for _ in 1 2 3; do
-        [ -e "$DEPS_CACHE_DIR/$fileName" ] || curl -fLo "$DEPS_CACHE_DIR/$fileName" "$url"
+        [ -e "$DEPS_CACHE_DIR/$fileName" ] || curl --ssl-no-revoke -fLo "$DEPS_CACHE_DIR/$fileName" "$url"
         fileChecksum=$("${algo}sum" "$DEPS_CACHE_DIR/$fileName" | awk '{ print $1 }')
         [ "$fileChecksum" = "$correctChecksum" ] && return 0
     done
