@@ -71,8 +71,8 @@ for url in $DEP_URLS; do
 
     # shellcheck disable=SC1003
     case "$url" in
-    *qt*) checksum=$(curl -fL "${url}.sha1"); algo="sha1"; outDir="$QTDIR/" ;;
-    *llvm*) checksum=$(curl -fL "${url}.sha256"); algo="sha256"; outDir="./build/lib_ext/Release-x64" ;;
+    *qt*) checksum=$(curl --ssl-no-revoke -fL "${url}.sha1"); algo="sha1"; outDir="$QTDIR/" ;;
+    *llvm*) checksum=$(curl --ssl-no-revoke -fL "${url}.sha256"); algo="sha256"; outDir="./build/lib_ext/Release-x64" ;;
     *ccache*) checksum=$CCACHE_SHA; algo="sha256"; outDir="$CCACHE_BIN_DIR" ;;
     *Vulkan*)
         # Vulkan setup needs to be run in batch environment
