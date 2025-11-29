@@ -132,3 +132,4 @@ CMakeUserPresets.json
 /.qt/QtDeploySupport-Release.cmake
 /.qt/QtDeployTargets-Release.cmake
 /.qt/QtDeployTargets-Debug.cmake
+/.ci
