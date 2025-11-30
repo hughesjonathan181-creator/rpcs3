@@ -7,11 +7,11 @@ CPU_ARCH="${1:-x86_64}"
 if [ "$DEPLOY_APPIMAGE" = "true" ]; then
     DESTDIR=AppDir ninja install
 
-    curl -fsSLo /usr/bin/linuxdeploy "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-$CPU_ARCH.AppImage"
+    curl --ssl-no-revoke -fsSLo /usr/bin/linuxdeploy "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-$CPU_ARCH.AppImage"
     chmod +x /usr/bin/linuxdeploy
-    curl -fsSLo /usr/bin/linuxdeploy-plugin-qt "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-$CPU_ARCH.AppImage"
+    curl --ssl-no-revoke -fsSLo /usr/bin/linuxdeploy-plugin-qt "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-$CPU_ARCH.AppImage"
     chmod +x /usr/bin/linuxdeploy-plugin-qt
-    curl -fsSLo linuxdeploy-plugin-checkrt.sh https://github.com/darealshinji/linuxdeploy-plugin-checkrt/releases/download/continuous/linuxdeploy-plugin-checkrt.sh
+    curl --ssl-no-revoke -fsSLo linuxdeploy-plugin-checkrt.sh https://github.com/darealshinji/linuxdeploy-plugin-checkrt/releases/download/continuous/linuxdeploy-plugin-checkrt.sh
     chmod +x ./linuxdeploy-plugin-checkrt.sh
 
     export EXTRA_PLATFORM_PLUGINS="libqwayland.so"
@@ -34,7 +34,7 @@ if [ "$DEPLOY_APPIMAGE" = "true" ]; then
 
     # Download translations
     mkdir -p "./AppDir/usr/translations"
-    ZIP_URL=$(curl -fsSL "https://api.github.com/repos/RPCS3/rpcs3_translations/releases/latest" \
+    ZIP_URL=$(curl --ssl-no-revoke -fsSL "https://api.github.com/repos/RPCS3/rpcs3_translations/releases/latest" \
       | grep "browser_download_url" \
       | grep "RPCS3-languages.zip" \
       | cut -d '"' -f 4)
@@ -42,7 +42,7 @@ if [ "$DEPLOY_APPIMAGE" = "true" ]; then
       echo "Failed to find RPCS3-languages.zip in the latest release. Continuing without translations."
     else
       echo "Downloading translations from: $ZIP_URL"
-      curl -L -o translations.zip "$ZIP_URL" || {
+      curl --ssl-no-revoke -L -o translations.zip "$ZIP_URL" || {
         echo "Failed to download translations.zip. Continuing without translations."
         exit 0
       }
@@ -51,7 +51,7 @@ if [ "$DEPLOY_APPIMAGE" = "true" ]; then
       rm -f translations.zip
     fi
 
-    curl -fsSLo /uruntime "https://github.com/VHSgunzo/uruntime/releases/download/v0.3.4/uruntime-appimage-dwarfs-$CPU_ARCH"
+    curl --ssl-no-revoke -fsSLo /uruntime "https://github.com/VHSgunzo/uruntime/releases/download/v0.3.4/uruntime-appimage-dwarfs-$CPU_ARCH"
     chmod +x /uruntime
     /uruntime --appimage-mkdwarfs -f --set-owner 0 --set-group 0 --no-history --no-create-timestamp \
     --compression zstd:level=22 -S26 -B32 --header /uruntime -i AppDir -o RPCS3.AppImage

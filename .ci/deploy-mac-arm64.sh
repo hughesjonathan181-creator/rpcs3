@@ -33,7 +33,7 @@ rm -rf "rpcs3.app/Contents/Frameworks/QtPdf.framework" \
 
 # Download translations
 mkdir -p "rpcs3.app/Contents/translations"
-ZIP_URL=$(curl -fsSL "https://api.github.com/repos/RPCS3/rpcs3_translations/releases/latest" \
+ZIP_URL=$(curl --ssl-no-revoke -fsSL "https://api.github.com/repos/RPCS3/rpcs3_translations/releases/latest" \
   | grep "browser_download_url" \
   | grep "RPCS3-languages.zip" \
   | cut -d '"' -f 4)
@@ -41,7 +41,7 @@ if [ -z "$ZIP_URL" ]; then
   echo "Failed to find RPCS3-languages.zip in the latest release. Continuing without translations."
 else
   echo "Downloading translations from: $ZIP_URL"
-  curl -L -o translations.zip "$ZIP_URL" || {
+  curl --ssl-no-revoke -L -o translations.zip "$ZIP_URL" || {
     echo "Failed to download translations.zip. Continuing without translations."
     exit 0
   }

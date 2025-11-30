@@ -12,12 +12,12 @@ rm -f ./bin/rpcs3.exp ./bin/rpcs3.lib ./bin/rpcs3.pdb ./bin/vc_redist.x64.exe
 # Prepare compatibility and SDL database for packaging
 mkdir ./bin/config
 mkdir ./bin/config/input_configs
-curl -fsSL 'https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/master/gamecontrollerdb.txt' 1> ./bin/config/input_configs/gamecontrollerdb.txt
-curl -fsSL 'https://rpcs3.net/compatibility?api=v1&export' | iconv -t UTF-8 1> ./bin/GuiConfigs/compat_database.dat
+curl --ssl-no-revoke -fsSL 'https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/master/gamecontrollerdb.txt' 1> ./bin/config/input_configs/gamecontrollerdb.txt
+curl --ssl-no-revoke -fsSL 'https://rpcs3.net/compatibility?api=v1&export' | iconv -t UTF-8 1> ./bin/GuiConfigs/compat_database.dat
 
 # Download translations
 mkdir -p ./bin/qt6/translations
-ZIP_URL=$(curl -fsSL "https://api.github.com/repos/RPCS3/rpcs3_translations/releases/latest" \
+ZIP_URL=$(curl --ssl-no-revoke -fsSL "https://api.github.com/repos/RPCS3/rpcs3_translations/releases/latest" \
   | grep "browser_download_url" \
   | grep "RPCS3-languages.zip" \
   | cut -d '"' -f 4)
@@ -25,7 +25,7 @@ if [ -z "$ZIP_URL" ]; then
   echo "Failed to find RPCS3-languages.zip in the latest release. Continuing without translations."
 else
   echo "Downloading translations from: $ZIP_URL"
-  curl -L -o translations.zip "$ZIP_URL" || {
+  curl --ssl-no-revoke -L -o translations.zip "$ZIP_URL" || {
     echo "Failed to download translations.zip. Continuing without translations."
     exit 0
   }
@@ -35,7 +35,7 @@ else
 fi
 
 # Download SSL certificate (not needed with CURLSSLOPT_NATIVE_CA)
-#curl -fsSL 'https://curl.haxx.se/ca/cacert.pem' 1> ./bin/cacert.pem
+#curl --ssl-no-revoke -fsSL 'https://curl.haxx.se/ca/cacert.pem' 1> ./bin/cacert.pem
 
 # Package artifacts
 7z a -m0=LZMA2 -mx9 "$BUILD" ./bin/*
